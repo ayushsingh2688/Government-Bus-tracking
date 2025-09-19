@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Bus Tracking App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden w-full max-w-md h-[800px] flex flex-col">
+
+        <div class="p-4 flex items-center justify-between border-b border-gray-200">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-indigo-700">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 1.5 0V6ZM13 15a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd" />
+                </svg>
+                <span class="font-bold text-lg text-indigo-700">9:14</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500">
+                    <path d="M16.5 6a.75.75 0 0 1 .75.75v3.25a.75.75 0 0 1-1.5 0V6.75a.75.75 0 0 1 .75-.75ZM18 10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2ZM5.25 6a.75.75 0 0 1 .75.75v3.25a.75.75 0 0 1-1.5 0V6.75a.75.75 0 0 1 .75-.75ZM6.75 10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2Z" />
+                    <path fill-rule="evenodd" d="M2.25 5.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1-.75-.75v-12Zm5.25.75a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V6Zm9.75-.75a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-.75.75h1.5a.75.75 0 0 1 .75-.75v-12a.75.75 0 0 1-.75-.75h-1.5Z" clip-rule="evenodd" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500">
+                    <path d="M2.25 2.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 .75.75v16.5a.75.75 0 0 1-.75.75H3a.75.75 0 0 1-.75-.75V2.25Z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4">
+
+            <div id="home-screen" class="screen-container active">
+                <div class="flex flex-col items-center mb-4">
+                    <span class="text-purple-700 font-bold text-3xl">CityBus Live</span>
+                </div>
+                <h1 class="text-2xl font-bold mb-6">Find Your Bus</h1>
+                
+                <div class="bg-gray-200 p-4 rounded-xl mb-4">
+                    <div class="relative">
+                        <div class="mb-2 relative">
+                            <label for="start-location" class="block text-sm font-medium text-gray-700">Source Location</label>
+                            <input type="text" id="start-location" placeholder="Source Location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-sm" autocomplete="off">
+                            <div id="start-suggestions" class="suggestions-container"></div>
+                            <div id="start-error" class="text-red-500 text-xs mt-1 hidden">Please enter a valid source city.</div>
+                        </div>
+                        <div class="mt-8 relative">
+                            <label for="end-location" class="block text-sm font-medium text-gray-700">Destination Location</label>
+                            <input type="text" id="end-location" placeholder="Destination Location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-sm" autocomplete="off">
+                            <div id="end-suggestions" class="suggestions-container"></div>
+                            <div id="end-error" class="text-red-500 text-xs mt-1 hidden">Please enter a valid destination city.</div>
+                        </div>
+                        
+                        <button id="swap-locations-btn" title="Swap locations" class="absolute left-1/2 top-[60%] -translate-x-1/2 -translate-y-1/2 z-20 bg-white p-1.5 rounded-full shadow-md border border-gray-300 hover:bg-gray-200 transition-transform active:scale-90">
+                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-600">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="text-center my-2 text-gray-500 text-sm">or</div>
+                    
+                    <div>
+                        <label for="bus-number" class="block text-sm font-medium text-gray-700">Bus Number</label>
+                        <input type="text" id="bus-number" placeholder="Bus Number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-sm">
+                    </div>
+                </div>
+
+                <button id="search-btn" class="w-full bg-lime-600 text-white rounded-xl py-3 font-semibold mb-6 shadow-md hover:bg-lime-700 transition">
+                    Search Bus
+                </button>
+
+                <h2 class="text-lg font-bold mb-3">Quick Stops</h2>
+                <div id="quick-stops-container" class="space-y-2">
+                    </div>
+
+                <h2 class="text-lg font-bold mb-3 mt-6">Recent Searches</h2>
+                <div id="recent-searches-container" class="space-y-2">
+                    </div>
+            </div>
+
+            <div id="eta-screen" class="screen-container">
+                <div class="flex items-center mb-4">
+                    <button onclick="showScreen('home-screen')" class="rounded-full p-2 hover:bg-gray-200 transition mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.94l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clip-rule="evenodd" /></svg>
+                    </button>
+                    <h1 class="text-xl font-bold">Available Buses</h1>
+                </div>
+                <div id="eta-results-container" class="bg-gray-200 p-1 rounded-xl mb-4 space-y-1">
+                    </div>
+            </div>
+
+            <div id="live-map-screen" class="screen-container">
+                <div class="flex items-center mb-4">
+                    <button onclick="showScreen('eta-screen')" class="rounded-full p-2 hover:bg-gray-200 transition mr-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.94l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clip-rule="evenodd" /></svg></button>
+                    <h1 id="map-title" class="text-xl font-bold">Live Bus Map</h1>
+                </div>
+                <div class="relative w-full h-[200px] rounded-xl overflow-hidden mb-4"><img src="mapppp.jpg" alt="Live Map" class="w-full h-full object-cover"></div>
+                
+                <h2 class="text-lg font-bold mb-2">Full Route</h2>
+                <div id="map-route-timeline" class="mb-4">
+                    </div>
+
+                <button onclick="showScreen('crowd-report-screen')" class="w-full bg-lime-600 text-white rounded-xl py-3 font-semibold mb-6 shadow-md hover:bg-lime-700 transition">Report Crowd</button>
+            </div>
+
+            <div id="crowd-report-screen" class="screen-container">
+                <div class="flex items-center mb-4">
+                    <button onclick="showScreen('live-map-screen')" class="rounded-full p-2 hover:bg-gray-200 transition mr-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.94l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clip-rule="evenodd" /></svg></button>
+                    <h1 class="text-xl font-bold">Crowd Report</h1>
+                </div>
+                <div class="p-4 bg-white rounded-xl mb-4">
+                    <h2 class="text-lg font-bold mb-2">Report Crowd Level</h2>
+                    <p class="text-sm text-gray-600 mb-4">Help fellow commuters by reporting the crowd standing in your bus.</p>
+                    <div id="crowd-low" class="crowd-option bg-gray-200 rounded-xl p-4 mb-2"><div class="font-semibold text-gray-800">Low</div><div class="text-sm text-gray-500">Plenty of seats available</div></div>
+                    <div id="crowd-medium" class="crowd-option bg-red-700 rounded-xl p-4 mb-2"><div class="font-semibold text-white">Medium</div><div class="text-sm text-white">Standing room only, no congestion.</div></div>
+                    <div id="crowd-high" class="crowd-option bg-gray-200 rounded-xl p-4 mb-2"><div class="font-semibold text-gray-800">High</div><div class="text-sm text-gray-500">Packed with minimal space.</div></div>
+                    <button id="submit-crowd-report-btn" class="w-full bg-lime-600 text-white rounded-xl py-3 font-semibold mt-4 shadow-md hover:bg-lime-700 transition">Submit</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex justify-around items-center p-4 border-t border-gray-200 bg-white">
+            <button id="home-nav" onclick="showScreen('home-screen')" class="nav-item flex flex-col items-center space-y-1 active">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon"><path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.69 8.69a1.5 1.5 0 0 1 2.56 1.096v4.46a3 3 0 0 1-3 3h-1.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75v4.5a.75.75 0 0 1-.75-.75H8.25a3 3 0 0 1-3-3v-4.46a1.5 1.5 0 0 1 2.56-1.095l8.69-8.69Z" /></svg>
+                <span class="nav-text text-xs text-gray-500">Home</span>
+            </button>
+            <button id="map-nav" onclick="showScreen('live-map-screen')" class="nav-item flex flex-col items-center space-y-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon"><path fill-rule="evenodd" d="m11.54 22.351.07.07c.465.466 1.15.65 1.76.505 1.76-.418 2.373-1.42 2.766-2.583.504-1.554.814-3.142.923-4.757.072-1.05.093-2.103.078-3.155L20 9a2 2 0 0 0-2-2h-3.238l-4.223-4.224a.75.75 0 0 0-1.06 0L5.238 7H2a2 2 0 0 0-2 2v2.302c0 .942.138 1.874.408 2.756.236.78.58 1.544 1.037 2.247.534.814 1.154 1.493 1.854 2.103a4.706 4.706 0 0 0 5.488.583l.47-.282ZM15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" /></svg>
+                <span class="nav-text text-xs text-gray-500">Map</span>
+            </button>
+            <button id="crowd-nav" onclick="showScreen('crowd-report-screen')" class="nav-item flex flex-col items-center space-y-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon"><path fill-rule="evenodd" d="M18 10.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 1.5 18v-6a1.5 1.5 0 0 1 1.5-1.5h15ZM10.5 7.5a1.5 1.5 0 0 1-1.5-1.5V3a.75.75 0 0 0-.91-.72l-5.637 1.409a1.5 1.5 0 0 0-1.096 1.879L3.58 8.169A3.75 3.75 0 0 1 6 7.5h.75a1.5 1.5 0 0 1 1.5 1.5v.75a.75.75 0 0 0 1.5 0v-1.5a.75.75 0 0 0-.75-.75h-.75ZM13.5 6a1.5 1.5 0 0 1 1.5-1.5v-.75a.75.75 0 0 0-.91-.72l-5.637 1.409a1.5 1.5 0 0 0-1.096 1.879l1.04 4.88a3.75 3.75 0 0 1 2.42-1.348h.75a1.5 1.5 0 0 1 1.5 1.5v.75a.75.75 0 0 0 1.5 0v-1.5A.75.75 0 0 0 13.5 6Z" clip-rule="evenodd" /></svg>
+                <span class="nav-text text-xs text-gray-500">Crowd</span>
+            </button>
+        </div>
+    </div>
+    
+    <div id="quick-stop-modal-overlay" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 class="text-lg font-bold mb-4">Save Route to Quick Stops?</h2>
+            <p class="text-sm text-gray-600 mb-6">Label this route for easy one-tap access later.</p>
+            <div class="space-y-3">
+                <button id="save-work-btn" class="w-full bg-blue-600 text-white rounded-lg py-2 font-semibold hover:bg-blue-700">Save as Work</button>
+                <button id="save-home-btn" class="w-full bg-purple-600 text-white rounded-lg py-2 font-semibold hover:bg-purple-700">Save as Home</button>
+                <button id="save-other-btn" class="w-full bg-gray-300 text-gray-800 rounded-lg py-2 font-semibold hover:bg-gray-400">Other / No Thanks</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
