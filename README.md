@@ -1,24 +1,46 @@
-# CityBus-Live
-A clean and easy-to-use design for a city bus tracking app that works great on your phone. It lets you see where your bus is, check its live arrival time, and help other riders by reporting how crowded it is.
+# CityBus Live
 
---------------------------------------------------------------------------------------------------------------------------------------
+CityBus Live is a mobile-style bus tracking interface. It helps riders search buses by route or bus number, check simulated arrival times, view a live-map style tracking screen, and report crowd levels for other passengers.
 
-Key Features of CityBus-Live
+## Features
 
-1.Flexible Bus Search: The app offers two distinct ways to find a bus: either by entering a source and destination or by searching directly for a bus number.
+- Search by source and destination
+- Search directly by bus number
+- ETA list for upcoming buses
+- Live-map style tracking screen
+- Crowd reporting with Low, Medium, and High levels
+- Multi-screen single-page interface controlled with JavaScript
+- Mobile-first layout using Tailwind CSS
 
-2.Real-Time ETA Display: It presents a clean, dynamic list showing upcoming buses, their routes, and their Estimated Time of Arrival (ETA) in minutes.
+## Tech Stack
 
-3.Live Map Tracking: A dedicated screen simulates a live map, allowing users to visually track the bus's location and its proximity to different stops.
+- HTML5
+- Tailwind CSS CDN
+- Custom CSS
+- Vanilla JavaScript
 
-4.Community Crowd Reporting: It includes an interactive feature for passengers to report the current crowd level on the bus (Low, Medium, or High), helping other commuters.
+## Project Structure
 
-5.Seamless Multi-Screen UI: The code uses JavaScript to manage a multi-screen experience within a single webpage, providing smooth navigation between different functions just like a native mobile app.
+```text
+.
+|-- index.html     # Main app interface
+|-- styles.css     # Custom styles
+|-- script.js      # Screen navigation and app interactions
+`-- README.md
+```
 
-------------------------------------------------------------------------------------------------------------------------------------------
+## Run Locally
 
+```bash
+git clone https://github.com/ayushsingh2688/Government-Bus-tracking.git
+cd Government-Bus-tracking
+```
 
+Open `index.html` in a browser.
 
+## Suggested Next Improvements
 
-
-
+- Add screenshots of the home, search results, tracking, and crowd report screens.
+- Replace simulated bus data with a real transit API when available.
+- Add GitHub Pages deployment for a public live demo.
+- Rename the repository to something cleaner such as `citybus-live`.
